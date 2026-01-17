@@ -1,0 +1,26 @@
+# Include documentation and license files
+include LICENSE
+include README.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+include SECURITY.md
+
+# Include package marker for type hints
+include src/contexlog/py.typed
+
+# Include tests
+recursive-include tests *.py
+
+# Include examples
+recursive-include examples *.py
+
+# Exclude build artifacts and CI files
+exclude .gitignore
+exclude .editorconfig
+exclude .readthedocs.yaml
+recursive-exclude .github *
+recursive-exclude docs *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store
