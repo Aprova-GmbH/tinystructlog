@@ -5,7 +5,7 @@ This example demonstrates the fundamental features of contexlog including
 setting context, logging with context, and clearing context.
 """
 
-from contexlog import get_logger, set_log_context, clear_log_context
+from tinystructlog import get_logger, set_log_context, clear_log_context
 
 # Create a logger for this module
 log = get_logger(__name__)

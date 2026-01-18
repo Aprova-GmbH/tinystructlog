@@ -2,8 +2,8 @@
 
 import logging
 
-from contexlog import clear_log_context, set_log_context
-from contexlog.core import ColoredFormatter, ContextFilter
+from tinystructlog import clear_log_context, set_log_context
+from tinystructlog.core import ColoredFormatter, ContextFilter
 
 
 class TestContextFilter:
@@ -276,3 +276,31 @@ class TestColoredFormatter:
         import re
 
         assert re.search(r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}", formatted)
+
+    def test_context_filter_default_behavior_v010_compatible(self):
+        """Test that default ContextFilter produces exact v0.1.0 output (backward compatibility)."""
+        clear_log_context()
+        set_log_context(user_id="123", request_id="abc")
+
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=10,
+            msg="Test message",
+            args=(),
+            exc_info=None,
+        )
+
+        # Create ContextFilter with default parameters (no arguments)
+        context_filter = ContextFilter()
+        context_filter.filter(record)
+
+        # Verify exact v0.1.0 behavior
+        # Keys are alphabetically sorted
+        assert record.context == "request_id=abc user_id=123"
+        # Bracketed with leading space
+        assert record.context_str == " [request_id=abc user_id=123]"
+        # Individual attributes injected
+        assert record.user_id == "123"
+        assert record.request_id == "abc"

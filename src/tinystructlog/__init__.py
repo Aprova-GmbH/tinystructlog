@@ -14,7 +14,7 @@ Features:
     - Minimal configuration required
 
 Example:
-    >>> from contexlog import get_logger, set_log_context
+    >>> from tinystructlog import get_logger, set_log_context
     >>> log = get_logger(__name__)
     >>> set_log_context(user_id="123", request_id="abc-def")
     >>> log.info("Processing user request")
@@ -22,6 +22,11 @@ Example:
 """
 
 from .core import (
+    DEFAULT_DATEFMT,
+    DEFAULT_FORMAT,
+    DETAILED_FORMAT,
+    MINIMAL_FORMAT,
+    SIMPLE_FORMAT,
     ColoredFormatter,
     ContextFilter,
     clear_log_context,
@@ -30,7 +35,7 @@ from .core import (
     set_log_context,
 )
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __all__ = [
     "get_logger",
     "set_log_context",
@@ -38,4 +43,9 @@ __all__ = [
     "log_context",
     "ContextFilter",
     "ColoredFormatter",
+    "DEFAULT_FORMAT",
+    "MINIMAL_FORMAT",
+    "DETAILED_FORMAT",
+    "SIMPLE_FORMAT",
+    "DEFAULT_DATEFMT",
 ]

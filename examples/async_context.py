@@ -7,7 +7,7 @@ into another.
 """
 
 import asyncio
-from contexlog import get_logger, set_log_context, log_context
+from tinystructlog import get_logger, set_log_context, log_context
 
 log = get_logger(__name__)
 

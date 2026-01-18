@@ -14,7 +14,7 @@ Key Features:
     - Full type hint support
 
 Example:
-    >>> from contexlog import get_logger, set_log_context
+    >>> from tinystructlog import get_logger, set_log_context
     >>> log = get_logger(__name__)
     >>> set_log_context(user_id="123", request_id="abc")
     >>> log.info("Processing request")
@@ -196,7 +196,31 @@ class ColoredFormatter(logging.Formatter):
         return formatted
 
 
-def get_logger(name: str) -> logging.Logger:
+# Preset format constants (available since v0.1.1)
+DEFAULT_FORMAT = (
+    f"[%(asctime)s] [%(levelname)s] "
+    f"{ColoredFormatter.DIM}[%(module)s.%(funcName)s:%(lineno)d]{ColoredFormatter.RESET}"
+    f"{ColoredFormatter.DIM}%(context_str)s{ColoredFormatter.RESET} "
+    f"%(message)s"
+)
+
+MINIMAL_FORMAT = "%(levelname)s: %(message)s"
+
+DETAILED_FORMAT = (
+    "[%(asctime)s] [%(levelname)s] [%(process)d] "
+    "[%(module)s.%(funcName)s:%(lineno)d]%(context_str)s %(message)s"
+)
+
+SIMPLE_FORMAT = "[%(levelname)s]%(context_str)s %(message)s"
+
+DEFAULT_DATEFMT = "%Y-%m-%d %H:%M:%S"
+
+
+def get_logger(
+    name: str,
+    fmt: str | None = None,
+    datefmt: str | None = None,
+) -> logging.Logger:
     """
     Get a configured logger with context support and colored output.
 
@@ -209,19 +233,40 @@ def get_logger(name: str) -> logging.Logger:
 
     Args:
         name: The logger name, typically __name__ of the calling module.
+        fmt: Optional log format string. Supports all standard logging format attributes.
+             Defaults to DEFAULT_FORMAT (v0.1.0 compatible format).
+             Use preset constants (MINIMAL_FORMAT, DETAILED_FORMAT, SIMPLE_FORMAT) or
+             provide a custom format string.
+        datefmt: Optional date format string for %(asctime)s.
+                Defaults to DEFAULT_DATEFMT ("%Y-%m-%d %H:%M:%S").
 
     Returns:
         A configured logging.Logger instance.
 
-    Example:
+    Examples:
+        >>> # Default format (v0.1.0 compatible)
         >>> log = get_logger(__name__)
         >>> log.info("Application started")
+
+        >>> # Using preset formats
+        >>> log = get_logger(__name__, fmt=MINIMAL_FORMAT)
+        >>> log.info("Simple message")  # Output: INFO: Simple message
+
+        >>> # Custom format
+        >>> log = get_logger(__name__, fmt="[%(levelname)s] %(message)s")
+        >>> log.info("Custom output")
+
+        >>> # With context
         >>> set_log_context(request_id="abc123")
         >>> log.info("Processing request")
 
     Environment Variables:
         LOG_LEVEL: Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
                   Defaults to INFO if not set.
+
+    Note:
+        Version 0.1.0 had an opinionated, hardcoded format. Starting with v0.1.1,
+        you can customize the format while maintaining full backward compatibility.
     """
     log = logging.getLogger(name)
 
@@ -230,16 +275,12 @@ def get_logger(name: str) -> logging.Logger:
     log.setLevel(level)
 
     if not log.handlers:
-        # Format: [timestamp] [level] [module.funcName:lineno] [context] message
-        fmt = (
-            f"[%(asctime)s] [%(levelname)s] "
-            f"{ColoredFormatter.DIM}[%(module)s.%(funcName)s:%(lineno)d]{ColoredFormatter.RESET}"
-            f"{ColoredFormatter.DIM}%(context_str)s{ColoredFormatter.RESET} "
-            f"%(message)s"
-        )
+        # Use provided format or fall back to default
+        log_format = fmt or DEFAULT_FORMAT
+        log_datefmt = datefmt or DEFAULT_DATEFMT
 
         handler = logging.StreamHandler(stream=sys.stdout)
-        formatter = ColoredFormatter(fmt, datefmt="%Y-%m-%d %H:%M:%S")
+        formatter = ColoredFormatter(log_format, datefmt=log_datefmt)
         handler.setFormatter(formatter)
         handler.addFilter(ContextFilter())
         log.addHandler(handler)

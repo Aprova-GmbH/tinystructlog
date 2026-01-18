@@ -14,6 +14,7 @@ Minimalistic context-aware structured logging for Python. Add contextual informa
 - **🎯 Context-Aware**: Automatically inject contextual information (user IDs, request IDs, etc.) into all log messages
 - **🔒 Thread & Async Safe**: Built on Python's `contextvars` for perfect isolation across threads and async tasks
 - **🎨 Colored Output**: Beautiful ANSI-colored terminal output for better readability
+- **🎛️ Flexible Formats**: Customizable output with sensible defaults and preset formats (v0.1.1+)
 - **⚡ Zero Dependencies**: No runtime dependencies - just pure Python
 - **📦 Minimal & Focused**: Does one thing well - context-aware logging
 - **🔧 Zero Configuration**: Sensible defaults, works out of the box
@@ -28,7 +29,7 @@ pip install contexlog
 ## Quick Start
 
 ```python
-from contexlog import get_logger, set_log_context
+from tinystructlog import get_logger, set_log_context
 
 # Create a logger
 log = get_logger(__name__)
@@ -64,7 +65,7 @@ contexlog makes this trivial while staying out of your way.
 Use the `log_context` context manager for temporary context that automatically cleans up:
 
 ```python
-from contexlog import get_logger, log_context
+from tinystructlog import get_logger, log_context
 
 log = get_logger(__name__)
 
@@ -82,14 +83,16 @@ Each async task gets its own isolated context - no cross-contamination:
 
 ```python
 import asyncio
-from contexlog import get_logger, set_log_context
+from tinystructlog import get_logger, set_log_context
 
 log = get_logger(__name__)
+
 
 async def handle_request(user_id: str, request_id: str):
     set_log_context(user_id=user_id, request_id=request_id)
     log.info("Processing request")  # Each task logs its own context
     await do_work()
+
 
 # These run concurrently, each with isolated context
 await asyncio.gather(
@@ -104,11 +107,12 @@ Perfect for web applications - set context per request:
 
 ```python
 from fastapi import FastAPI, Request
-from contexlog import get_logger, set_log_context, clear_log_context
+from tinystructlog import get_logger, set_log_context, clear_log_context
 import uuid
 
 app = FastAPI()
 log = get_logger(__name__)
+
 
 @app.middleware("http")
 async def add_context(request: Request, call_next):
@@ -136,6 +140,68 @@ python your_app.py
 ```
 
 Supported levels: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`
+
+### Custom Log Formats (v0.1.1+)
+
+While contexlog comes with sensible defaults, you can customize the output format to match your needs:
+
+#### Using Preset Formats
+
+```python
+from tinystructlog import get_logger, MINIMAL_FORMAT, DETAILED_FORMAT, SIMPLE_FORMAT
+
+# Minimal format - just level and message
+log = get_logger(__name__, fmt=MINIMAL_FORMAT)
+log.info("Clean output")
+# Output: INFO: Clean output
+
+# Detailed format - includes process ID
+log = get_logger(__name__, fmt=DETAILED_FORMAT)
+log.info("Detailed output")
+# Output: [2026-01-18 10:30:45] [INFO] [12345] [module.function:10] Message
+
+# Simple format - level and context only
+log = get_logger(__name__, fmt=SIMPLE_FORMAT)
+log.info("Simple output")
+# Output: [INFO] Message
+```
+
+#### Custom Format Strings
+
+```python
+from tinystructlog import get_logger
+
+# Fully custom format
+log = get_logger(__name__, fmt="%(levelname)s | %(message)s")
+log.info("Custom")
+# Output: INFO | Custom
+
+# Custom with timestamp
+log = get_logger(__name__,
+                 fmt="[%(asctime)s] %(message)s",
+                 datefmt="%H:%M:%S"
+                 )
+log.info("Time only")
+# Output: [10:30:45] Time only
+```
+
+#### Available Format Variables
+
+Standard Python logging attributes:
+- `%(asctime)s` - Timestamp (customize with `datefmt`)
+- `%(levelname)s` - Log level (DEBUG, INFO, etc.)
+- `%(module)s` - Module name
+- `%(funcName)s` - Function name
+- `%(lineno)d` - Line number
+- `%(message)s` - Log message
+- `%(process)d` - Process ID
+
+contexlog-specific attributes:
+- `%(context)s` - Raw context string (e.g., "key1=val1 key2=val2")
+- `%(context_str)s` - Bracketed context (e.g., " [key1=val1 key2=val2]")
+- Individual context keys as attributes
+
+**Note:** Version 0.1.0 had an opinionated, hardcoded format. Starting with v0.1.1, you can customize it while maintaining full backward compatibility. The default format (when no `fmt` parameter is provided) remains identical to v0.1.0.
 
 ## Use Cases
 

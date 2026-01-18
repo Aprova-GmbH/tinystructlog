@@ -4,8 +4,8 @@ import asyncio
 
 import pytest
 
-from contexlog import clear_log_context, log_context, set_log_context
-from contexlog.core import _log_ctx
+from tinystructlog import clear_log_context, log_context, set_log_context
+from tinystructlog.core import _log_ctx
 
 
 class TestSetLogContext:

@@ -408,3 +408,126 @@ Example for comprehensive error handling:
             handler = ErrorHandler()
             handler.handle_error(e, {"operation": "risky_operation"})
             raise
+
+Custom Format Examples (v0.1.1+)
+---------------------------------
+
+Minimal Console Output
+~~~~~~~~~~~~~~~~~~~~~~
+
+For development environments where you want clean, minimal output:
+
+.. code-block:: python
+
+    from contexlog import get_logger, set_log_context, MINIMAL_FORMAT
+
+    log = get_logger(__name__, fmt=MINIMAL_FORMAT)
+
+    set_log_context(user_id="123")
+    log.info("User logged in")
+    log.warning("Low disk space")
+    log.error("Connection failed")
+
+    # Output:
+    # INFO: User logged in
+    # WARNING: Low disk space
+    # ERROR: Connection failed
+
+Detailed Production Logging
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For production environments with detailed context:
+
+.. code-block:: python
+
+    from contexlog import get_logger, set_log_context, DETAILED_FORMAT
+
+    # Detailed format includes process ID
+    log = get_logger(__name__, fmt=DETAILED_FORMAT)
+
+    set_log_context(
+        environment="production",
+        instance_id="i-12345",
+        version="1.0.0"
+    )
+
+    log.info("Application started")
+    # Output: [2026-01-18 10:30:45] [INFO] [42681] [main.start:10] [environment=production instance_id=i-12345 version=1.0.0] Application started
+
+Simple Format with Context
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For logs that focus on level and context:
+
+.. code-block:: python
+
+    from contexlog import get_logger, set_log_context, SIMPLE_FORMAT
+
+    log = get_logger(__name__, fmt=SIMPLE_FORMAT)
+
+    set_log_context(api_key="key-123", endpoint="/api/v1/users")
+    log.info("API request")
+
+    # Output: [INFO] [api_key=key-123 endpoint=/api/v1/users] API request
+
+Custom Format for Log Aggregation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For integration with log aggregation services like Logstash or Datadog:
+
+.. code-block:: python
+
+    from contexlog import get_logger, set_log_context
+
+    # Custom format optimized for parsing
+    log = get_logger(
+        __name__,
+        fmt='level=%(levelname)s ts=%(asctime)s module=%(module)s %(context)s msg="%(message)s"',
+        datefmt="%Y-%m-%dT%H:%M:%S"
+    )
+
+    set_log_context(service="api", method="POST", path="/users")
+    log.info("Request processed")
+
+    # Output: level=INFO ts=2026-01-18T10:30:45 module=main method=POST path=/users service=api msg="Request processed"
+
+Time-Only Format for CLI Tools
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For command-line tools where full timestamps aren't needed:
+
+.. code-block:: python
+
+    from contexlog import get_logger
+
+    log = get_logger(
+        __name__,
+        fmt="[%(asctime)s] %(levelname)s: %(message)s",
+        datefmt="%H:%M:%S"
+    )
+
+    log.info("Starting backup")
+    log.info("Backup completed")
+
+    # Output:
+    # [10:30:45] INFO: Starting backup
+    # [10:35:12] INFO: Backup completed
+
+Mixed Format with Context Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using context variables directly in custom formats:
+
+.. code-block:: python
+
+    from contexlog import get_logger, set_log_context, DEFAULT_FORMAT
+
+    # You can reference the DEFAULT_FORMAT and modify it
+    log = get_logger(__name__)  # Uses default format
+
+    set_log_context(request_id="req-123", user="alice")
+    log.info("Processing request")
+
+    # The context variables are also available as individual attributes
+    # You can access them in custom format strings like %(request_id)s
+    # but using %(context_str)s is recommended for flexibility

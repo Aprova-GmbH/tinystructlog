@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-01-18
+
+### Added
+- Custom log format support via `fmt` and `datefmt` parameters in `get_logger()`
+- Preset format constants: `MINIMAL_FORMAT`, `DETAILED_FORMAT`, `SIMPLE_FORMAT`
+- Exported `DEFAULT_FORMAT` and `DEFAULT_DATEFMT` constants for reference
+- Comprehensive examples for custom formats in README and documentation
+
+### Changed
+- Documentation now explicitly states that v0.1.0 had an opinionated, hardcoded format
+- Enhanced API documentation with custom format examples and usage patterns
+
+### Note
+- **Fully backward compatible** - default behavior unchanged from v0.1.0
+- Calling `get_logger(__name__)` without parameters produces identical output to v0.1.0
+
 ## [0.1.0] - 2024-01-17
 
 ### Added
@@ -22,5 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation and examples
 - MIT license
 
-[Unreleased]: https://github.com/vykhand/contexlog/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/vykhand/contexlog/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/vykhand/contexlog/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/vykhand/contexlog/releases/tag/v0.1.0

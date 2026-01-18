@@ -2,9 +2,10 @@
 
 import logging
 import os
+import re
 
-from contexlog import clear_log_context, get_logger, set_log_context
-from contexlog.core import ColoredFormatter, ContextFilter
+from tinystructlog import clear_log_context, get_logger, set_log_context
+from tinystructlog.core import ColoredFormatter, ContextFilter
 
 
 class TestGetLogger:
@@ -164,3 +165,129 @@ class TestLoggingWithContext:
         assert caplog.records[2].levelname == "WARNING"
         assert caplog.records[3].levelname == "ERROR"
         assert caplog.records[4].levelname == "CRITICAL"
+
+
+class TestCustomFormats:
+    """Tests for custom format support (v0.1.1+)."""
+
+    def test_custom_format_parameter(self, capsys):
+        """Test that get_logger respects custom fmt parameter."""
+        from tinystructlog import get_logger
+
+        log = get_logger("test.custom_fmt_v2", fmt="%(levelname)s: %(message)s")
+        log.info("Test message")
+
+        captured = capsys.readouterr()
+        # Check the actual stdout output (with ANSI codes)
+        assert "INFO" in captured.out
+        assert "Test message" in captured.out
+        # Verify it uses custom format (minimal, no timestamp)
+        # The custom format should not contain brackets with dates
+        assert (
+            "[2024" not in captured.out
+            and "[2025" not in captured.out
+            and "[2026" not in captured.out
+        )
+
+    def test_custom_datefmt_parameter(self, capsys):
+        """Test that get_logger respects custom datefmt parameter."""
+        from tinystructlog import get_logger
+
+        log = get_logger(
+            "test.custom_datefmt_v2", fmt="[%(asctime)s] %(message)s", datefmt="%H:%M:%S"
+        )
+        log.info("Test message")
+
+        captured = capsys.readouterr()
+        # Should contain time in HH:MM:SS format (no date)
+        assert re.search(r"\[\d{2}:\d{2}:\d{2}\]", captured.out)
+        # Should not contain full date
+        assert not re.search(r"\d{4}-\d{2}-\d{2}", captured.out)
+
+    def test_default_format_unchanged(self, capsys):
+        """Test that default behavior matches v0.1.0 (backward compatibility)."""
+        from tinystructlog import clear_log_context, get_logger, set_log_context
+
+        clear_log_context()
+        set_log_context(user_id="123")
+
+        # Call without any format parameters (default behavior)
+        log = get_logger("test.default_unchanged_v2")
+        log.info("Test message")
+
+        captured = capsys.readouterr()
+        # Should contain all default format elements
+        assert "INFO" in captured.out
+        assert "test_logger" in captured.out
+        assert "user_id=123" in captured.out
+        assert "Test message" in captured.out
+
+    def test_minimal_format_preset(self, capsys):
+        """Test that MINIMAL_FORMAT preset works correctly."""
+        from tinystructlog import MINIMAL_FORMAT, get_logger
+
+        log = get_logger("test.minimal_v2", fmt=MINIMAL_FORMAT)
+        log.info("Simple message")
+
+        captured = capsys.readouterr()
+        # The minimal format should produce "INFO: Simple message"
+        # (with ANSI color codes for INFO)
+        assert "INFO" in captured.out
+        assert "Simple message" in captured.out
+        assert ":" in captured.out
+
+    def test_detailed_format_preset(self, capsys):
+        """Test that DETAILED_FORMAT preset works correctly."""
+        from tinystructlog import DETAILED_FORMAT, clear_log_context, get_logger, set_log_context
+
+        clear_log_context()
+        set_log_context(test_key="test_value")
+
+        log = get_logger("test.detailed_v2", fmt=DETAILED_FORMAT)
+        log.info("Detailed message")
+
+        captured = capsys.readouterr()
+        # Should contain process ID
+        assert re.search(r"\[\d+\]", captured.out)
+        # Should contain context
+        assert "test_key=test_value" in captured.out
+        # Should contain message
+        assert "Detailed message" in captured.out
+
+    def test_simple_format_preset(self, capsys):
+        """Test that SIMPLE_FORMAT preset works correctly."""
+        from tinystructlog import SIMPLE_FORMAT, clear_log_context, get_logger, set_log_context
+
+        clear_log_context()
+        set_log_context(key="value")
+
+        log = get_logger("test.simple_v2", fmt=SIMPLE_FORMAT)
+        log.info("Simple")
+
+        captured = capsys.readouterr()
+        assert "INFO" in captured.out
+        assert "key=value" in captured.out
+        assert "Simple" in captured.out
+
+    def test_format_constants_exported(self):
+        """Test that format constants are properly exported."""
+        from tinystructlog import (
+            DEFAULT_DATEFMT,
+            DEFAULT_FORMAT,
+            DETAILED_FORMAT,
+            MINIMAL_FORMAT,
+            SIMPLE_FORMAT,
+        )
+
+        # Verify they are strings
+        assert isinstance(DEFAULT_FORMAT, str)
+        assert isinstance(MINIMAL_FORMAT, str)
+        assert isinstance(DETAILED_FORMAT, str)
+        assert isinstance(SIMPLE_FORMAT, str)
+        assert isinstance(DEFAULT_DATEFMT, str)
+
+        # Verify MINIMAL_FORMAT is actually minimal
+        assert MINIMAL_FORMAT == "%(levelname)s: %(message)s"
+
+        # Verify DEFAULT_DATEFMT is correct
+        assert DEFAULT_DATEFMT == "%Y-%m-%d %H:%M:%S"

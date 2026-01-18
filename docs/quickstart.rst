@@ -223,6 +223,72 @@ Colored Output
 
 Colored output is enabled by default when logging to a terminal. Colors are automatically disabled when output is redirected to a file or pipe.
 
+Custom Log Formats (v0.1.1+)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+While contexlog comes with sensible defaults, you can customize the output format.
+
+**Using Preset Formats:**
+
+.. code-block:: python
+
+    from contexlog import get_logger, MINIMAL_FORMAT, DETAILED_FORMAT, SIMPLE_FORMAT
+
+    # Minimal format - just level and message
+    log = get_logger(__name__, fmt=MINIMAL_FORMAT)
+    log.info("Clean output")
+    # Output: INFO: Clean output
+
+    # Detailed format - includes process ID
+    log = get_logger(__name__, fmt=DETAILED_FORMAT)
+    log.info("Detailed output")
+    # Output: [2026-01-18 10:30:45] [INFO] [12345] [module.function:10] Message
+
+    # Simple format - level and context only
+    log = get_logger(__name__, fmt=SIMPLE_FORMAT)
+    log.info("Simple output")
+    # Output: [INFO] Message
+
+**Custom Format Strings:**
+
+.. code-block:: python
+
+    from contexlog import get_logger
+
+    # Fully custom format
+    log = get_logger(__name__, fmt="%(levelname)s | %(message)s")
+    log.info("Custom")
+    # Output: INFO | Custom
+
+    # Custom with timestamp
+    log = get_logger(__name__,
+        fmt="[%(asctime)s] %(message)s",
+        datefmt="%H:%M:%S"
+    )
+    log.info("Time only")
+    # Output: [10:30:45] Time only
+
+**Available Format Variables:**
+
+Standard Python logging attributes:
+
+* ``%(asctime)s`` - Timestamp (customize with ``datefmt``)
+* ``%(levelname)s`` - Log level (DEBUG, INFO, etc.)
+* ``%(module)s`` - Module name
+* ``%(funcName)s`` - Function name
+* ``%(lineno)d`` - Line number
+* ``%(message)s`` - Log message
+* ``%(process)d`` - Process ID
+
+contexlog-specific attributes:
+
+* ``%(context)s`` - Raw context string (e.g., "key1=val1 key2=val2")
+* ``%(context_str)s`` - Bracketed context (e.g., " [key1=val1 key2=val2]")
+* Individual context keys as attributes
+
+.. note::
+   **Backward Compatibility:** Version 0.1.0 had an opinionated, hardcoded format. Starting with v0.1.1, you can customize it while maintaining full backward compatibility. The default format (when no ``fmt`` parameter is provided) remains identical to v0.1.0.
+
 Next Steps
 ----------
 

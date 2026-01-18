@@ -8,7 +8,7 @@ Note: This is a demonstration. To run this example, install FastAPI and uvicorn:
     pip install fastapi uvicorn
 """
 
-from contexlog import get_logger, set_log_context, clear_log_context
+from tinystructlog import get_logger, set_log_context, clear_log_context
 import uuid
 
 # Uncomment these imports if you want to run this example
