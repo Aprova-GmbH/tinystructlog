@@ -43,4 +43,4 @@ jobs:
           files: dist/*
           generate_release_notes: true
           body: |
-            See [CHANGELOG.md](https://github.com/Aprova-GmbH/contextlog/blob/main/CHANGELOG.md) for details.
+            See [CHANGELOG.md](https://github.com/Aprova-GmbH/tinystructlog/blob/main/CHANGELOG.md) for details.

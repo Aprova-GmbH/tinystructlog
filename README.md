@@ -1,9 +1,9 @@
-# contexlog
+# tinystructlog
 
-[![PyPI version](https://badge.fury.io/py/contexlog.svg)](https://badge.fury.io/py/contexlog)
-[![Python versions](https://img.shields.io/pypi/pyversions/contexlog.svg)](https://pypi.org/project/contexlog/)
-[![Build Status](https://github.com/Aprova-GmbH/contextlog/workflows/Tests/badge.svg)](https://github.com/Aprova-GmbH/contextlog/actions)
-[![Coverage](https://codecov.io/gh/Aprova-GmbH/contextlog/branch/main/graph/badge.svg)](https://codecov.io/gh/Aprova-GmbH/contextlog)
+[![PyPI version](https://badge.fury.io/py/tinystructlog.svg)](https://badge.fury.io/py/tinystructlog)
+[![Python versions](https://img.shields.io/pypi/pyversions/tinystructlog.svg)](https://pypi.org/project/tinystructlog/)
+[![Build Status](https://github.com/Aprova-GmbH/tinystructlog/workflows/Tests/badge.svg)](https://github.com/Aprova-GmbH/tinystructlog/actions)
+[![Coverage](https://codecov.io/gh/Aprova-GmbH/tinystructlog/branch/main/graph/badge.svg)](https://codecov.io/gh/Aprova-GmbH/tinystructlog)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -23,7 +23,7 @@ Minimalistic context-aware structured logging for Python. Add contextual informa
 ## Installation
 
 ```bash
-pip install contexlog
+pip install tinystructlog
 ```
 
 ## Quick Start
@@ -47,7 +47,7 @@ log.error("An error occurred")
 # Output: [2024-01-17 10:30:46] [ERROR] [main.<module>:11] [request_id=abc-def user_id=12345] An error occurred
 ```
 
-## Why contexlog?
+## Why tinystructlog?
 
 When building applications, especially web services or async workers, you often need to track context across multiple operations:
 
@@ -56,7 +56,7 @@ When building applications, especially web services or async workers, you often 
 - **User tracking**: Know which user triggered each log event
 - **Distributed systems**: Correlate logs across different parts of your system
 
-contexlog makes this trivial while staying out of your way.
+tinystructlog makes this trivial while staying out of your way.
 
 ## Advanced Usage
 
@@ -143,7 +143,7 @@ Supported levels: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`
 
 ### Custom Log Formats (v0.1.1+)
 
-While contexlog comes with sensible defaults, you can customize the output format to match your needs:
+While tinystructlog comes with sensible defaults, you can customize the output format to match your needs:
 
 #### Using Preset Formats
 
@@ -196,7 +196,7 @@ Standard Python logging attributes:
 - `%(message)s` - Log message
 - `%(process)d` - Process ID
 
-contexlog-specific attributes:
+tinystructlog-specific attributes:
 - `%(context)s` - Raw context string (e.g., "key1=val1 key2=val2")
 - `%(context_str)s` - Bracketed context (e.g., " [key1=val1 key2=val2]")
 - Individual context keys as attributes
@@ -215,11 +215,11 @@ contexlog-specific attributes:
 
 ### vs. Standard logging
 
-Standard library logging requires manual context passing or using filters on every logger. contexlog handles this automatically with proper async/thread safety.
+Standard library logging requires manual context passing or using filters on every logger. tinystructlog handles this automatically with proper async/thread safety.
 
 ### vs. structlog
 
-structlog is feature-rich but heavier. contexlog is minimalistic (zero dependencies!) and focuses purely on context management with sensible defaults for common use cases.
+structlog is feature-rich but heavier. tinystructlog is minimalistic (zero dependencies!) and focuses purely on context management with sensible defaults for common use cases.
 
 ## API Reference
 
@@ -241,7 +241,7 @@ Context manager for temporary context that automatically cleans up.
 
 ## Documentation
 
-Full documentation is available at [contexlog.readthedocs.io](https://contexlog.readthedocs.io)
+Full documentation is available at [tinystructlog.readthedocs.io](https://tinystructlog.readthedocs.io)
 
 ## Contributing
 

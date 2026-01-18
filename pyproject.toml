@@ -1,5 +1,5 @@
 [project]
-name = "contexlog"
+name = "tinystructlog"
 version = "0.1.1"
 description = "Minimalistic context-aware structured logging for Python"
 readme = "README.md"
@@ -40,18 +40,18 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Aprova-GmbH/contextlog"
-Documentation = "https://contexlog.readthedocs.io"
-Repository = "https://github.com/Aprova-GmbH/contextlog"
-Issues = "https://github.com/Aprova-GmbH/contextlog/issues"
-Changelog = "https://github.com/Aprova-GmbH/contextlog/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/Aprova-GmbH/tinystructlog"
+Documentation = "https://tinystructlog.readthedocs.io"
+Repository = "https://github.com/Aprova-GmbH/tinystructlog"
+Issues = "https://github.com/Aprova-GmbH/tinystructlog/issues"
+Changelog = "https://github.com/Aprova-GmbH/tinystructlog/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatchling.build.targets.wheel]
-packages = ["src/contexlog"]
+packages = ["src/tinystructlog"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -59,7 +59,7 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
-    "--cov=contexlog",
+    "--cov=tinystructlog",
     "--cov-report=term-missing",
     "--cov-report=html",
     "--cov-fail-under=90",
@@ -111,10 +111,10 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["contexlog"]
+known-first-party = ["tinystructlog"]
 
 [tool.coverage.run]
-source = ["src/contexlog"]
+source = ["src/tinystructlog"]
 omit = ["tests/*", ".venv/*"]
 
 [tool.coverage.report]
