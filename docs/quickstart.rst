@@ -4,11 +4,11 @@ Quick Start Guide
 Installation
 ------------
 
-Install ``contexlog`` using pip:
+Install ``tinystructlog`` using pip:
 
 .. code-block:: bash
 
-    pip install contexlog
+    pip install tinystructlog
 
 Requirements: Python 3.11 or higher.
 
@@ -19,7 +19,7 @@ The simplest way to get started:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context
+    from tinystructlog import get_logger, set_log_context
 
     # Create a logger
     log = get_logger(__name__)
@@ -48,7 +48,7 @@ Use ``set_log_context()`` to add or update context variables:
 
 .. code-block:: python
 
-    from contexlog import set_log_context, get_logger
+    from tinystructlog import set_log_context, get_logger
 
     log = get_logger(__name__)
 
@@ -71,7 +71,7 @@ Remove specific keys or clear all context:
 
 .. code-block:: python
 
-    from contexlog import clear_log_context, set_log_context, get_logger
+    from tinystructlog import clear_log_context, set_log_context, get_logger
 
     log = get_logger(__name__)
 
@@ -93,7 +93,7 @@ Use the ``log_context`` context manager for temporary context:
 
 .. code-block:: python
 
-    from contexlog import log_context, get_logger
+    from tinystructlog import log_context, get_logger
 
     log = get_logger(__name__)
 
@@ -108,12 +108,12 @@ Use the ``log_context`` context manager for temporary context:
 Async Usage
 -----------
 
-``contexlog`` is fully async-safe with automatic context isolation:
+``tinystructlog`` is fully async-safe with automatic context isolation:
 
 .. code-block:: python
 
     import asyncio
-    from contexlog import get_logger, set_log_context
+    from tinystructlog import get_logger, set_log_context
 
     log = get_logger(__name__)
 
@@ -142,7 +142,7 @@ Example with FastAPI:
 .. code-block:: python
 
     from fastapi import FastAPI, Request
-    from contexlog import get_logger, set_log_context, clear_log_context
+    from tinystructlog import get_logger, set_log_context, clear_log_context
     import uuid
 
     app = FastAPI()
@@ -175,7 +175,7 @@ Example with Flask:
 .. code-block:: python
 
     from flask import Flask, request, g
-    from contexlog import get_logger, set_log_context, clear_log_context
+    from tinystructlog import get_logger, set_log_context, clear_log_context
     import uuid
 
     app = Flask(__name__)
@@ -226,13 +226,13 @@ Colored output is enabled by default when logging to a terminal. Colors are auto
 Custom Log Formats (v0.1.1+)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-While contexlog comes with sensible defaults, you can customize the output format.
+While tinystructlog comes with sensible defaults, you can customize the output format.
 
 **Using Preset Formats:**
 
 .. code-block:: python
 
-    from contexlog import get_logger, MINIMAL_FORMAT, DETAILED_FORMAT, SIMPLE_FORMAT
+    from tinystructlog import get_logger, MINIMAL_FORMAT, DETAILED_FORMAT, SIMPLE_FORMAT
 
     # Minimal format - just level and message
     log = get_logger(__name__, fmt=MINIMAL_FORMAT)
@@ -253,7 +253,7 @@ While contexlog comes with sensible defaults, you can customize the output forma
 
 .. code-block:: python
 
-    from contexlog import get_logger
+    from tinystructlog import get_logger
 
     # Fully custom format
     log = get_logger(__name__, fmt="%(levelname)s | %(message)s")
@@ -280,7 +280,7 @@ Standard Python logging attributes:
 * ``%(message)s`` - Log message
 * ``%(process)d`` - Process ID
 
-contexlog-specific attributes:
+tinystructlog-specific attributes:
 
 * ``%(context)s`` - Raw context string (e.g., "key1=val1 key2=val2")
 * ``%(context_str)s`` - Bracketed context (e.g., " [key1=val1 key2=val2]")

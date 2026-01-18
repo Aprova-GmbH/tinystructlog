@@ -11,7 +11,7 @@ Complete example with FastAPI middleware for request tracing:
 .. code-block:: python
 
     from fastapi import FastAPI, Request, HTTPException
-    from contexlog import get_logger, set_log_context, clear_log_context
+    from tinystructlog import get_logger, set_log_context, clear_log_context
     import uuid
     import time
 
@@ -93,7 +93,7 @@ Example for background task processing with context isolation:
 .. code-block:: python
 
     import asyncio
-    from contexlog import get_logger, set_log_context, log_context
+    from tinystructlog import get_logger, set_log_context, log_context
     import uuid
 
     log = get_logger(__name__)
@@ -156,7 +156,7 @@ Example for a multi-tenant SaaS application:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context, log_context
+    from tinystructlog import get_logger, set_log_context, log_context
     from typing import Optional
 
     log = get_logger(__name__)
@@ -221,7 +221,7 @@ Example for distributed tracing across services:
 .. code-block:: python
 
     import httpx
-    from contexlog import get_logger, set_log_context, clear_log_context
+    from tinystructlog import get_logger, set_log_context, clear_log_context
     import uuid
 
     log = get_logger(__name__)
@@ -234,7 +234,7 @@ Example for distributed tracing across services:
 
         async def request(self, method: str, url: str, **kwargs):
             # Generate or use existing trace ID
-            import contexlog.core as ctx_module
+            import tinystructlog.core as ctx_module
             context = ctx_module._log_ctx.get({})
             trace_id = context.get("trace_id", str(uuid.uuid4()))
 
@@ -287,7 +287,7 @@ Example for database operations with connection pooling:
 
 .. code-block:: python
 
-    from contexlog import get_logger, log_context
+    from tinystructlog import get_logger, log_context
     import asyncpg
     import time
 
@@ -357,7 +357,7 @@ Example for comprehensive error handling:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context, log_context
+    from tinystructlog import get_logger, set_log_context, log_context
     import traceback
 
     log = get_logger(__name__)
@@ -419,7 +419,7 @@ For development environments where you want clean, minimal output:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context, MINIMAL_FORMAT
+    from tinystructlog import get_logger, set_log_context, MINIMAL_FORMAT
 
     log = get_logger(__name__, fmt=MINIMAL_FORMAT)
 
@@ -440,7 +440,7 @@ For production environments with detailed context:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context, DETAILED_FORMAT
+    from tinystructlog import get_logger, set_log_context, DETAILED_FORMAT
 
     # Detailed format includes process ID
     log = get_logger(__name__, fmt=DETAILED_FORMAT)
@@ -461,7 +461,7 @@ For logs that focus on level and context:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context, SIMPLE_FORMAT
+    from tinystructlog import get_logger, set_log_context, SIMPLE_FORMAT
 
     log = get_logger(__name__, fmt=SIMPLE_FORMAT)
 
@@ -477,7 +477,7 @@ For integration with log aggregation services like Logstash or Datadog:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context
+    from tinystructlog import get_logger, set_log_context
 
     # Custom format optimized for parsing
     log = get_logger(
@@ -498,7 +498,7 @@ For command-line tools where full timestamps aren't needed:
 
 .. code-block:: python
 
-    from contexlog import get_logger
+    from tinystructlog import get_logger
 
     log = get_logger(
         __name__,
@@ -520,7 +520,7 @@ Using context variables directly in custom formats:
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context, DEFAULT_FORMAT
+    from tinystructlog import get_logger, set_log_context, DEFAULT_FORMAT
 
     # You can reference the DEFAULT_FORMAT and modify it
     log = get_logger(__name__)  # Uses default format

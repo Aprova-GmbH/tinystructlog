@@ -1,12 +1,12 @@
-contexlog - Context-Aware Logging
-==================================
+tinystructlog - Context-Aware Logging
+======================================
 
-Welcome to **contexlog**, a minimalistic context-aware structured logging library for Python.
+Welcome to **tinystructlog**, a minimalistic context-aware structured logging library for Python.
 
 Overview
 --------
 
-``contexlog`` makes it effortless to add contextual information to your logs. Perfect for multi-tenant applications, microservices, async workers, and any application where you need to track request IDs, user IDs, or other contextual data across your application.
+``tinystructlog`` makes it effortless to add contextual information to your logs. Perfect for multi-tenant applications, microservices, async workers, and any application where you need to track request IDs, user IDs, or other contextual data across your application.
 
 Key Features
 ------------
@@ -24,7 +24,7 @@ Quick Example
 
 .. code-block:: python
 
-    from contexlog import get_logger, set_log_context
+    from tinystructlog import get_logger, set_log_context
 
     log = get_logger(__name__)
 
@@ -44,7 +44,7 @@ Install via pip:
 
 .. code-block:: bash
 
-    pip install contexlog
+    pip install tinystructlog
 
 Python 3.11+ is required.
 
