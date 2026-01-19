@@ -213,6 +213,19 @@ tinystructlog-specific attributes:
 
 ## Comparison with Alternatives
 
+### vs. loguru
+
+[loguru](https://github.com/Delgan/loguru) is popular for its simplicity and rich features. Key differences:
+
+- **Dependencies**: tinystructlog has zero dependencies; loguru includes additional libraries
+- **Context**: tinystructlog uses `contextvars` for automatic thread/async isolation; loguru requires explicit `bind()` calls
+- **Focus**: tinystructlog focuses purely on context management; loguru provides rotation, retention, compression, and more
+- **Integration**: tinystructlog works with standard logging infrastructure; loguru replaces it
+
+Choose tinystructlog for minimal footprint and automatic context propagation. Choose loguru for rich features and advanced error handling.
+
+See the [full comparison](https://tinystructlog.readthedocs.io/en/latest/comparison.html) for details on reproducing tinystructlog's format in loguru.
+
 ### vs. Standard logging
 
 Standard library logging requires manual context passing or using filters on every logger. tinystructlog handles this automatically with proper async/thread safety.

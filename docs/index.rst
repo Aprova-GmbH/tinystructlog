@@ -58,6 +58,7 @@ Contents
    quickstart
    api
    examples
+   comparison
 
 Indices and tables
 ==================
