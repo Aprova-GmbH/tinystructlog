@@ -35,7 +35,7 @@ from .core import (
     set_log_context,
 )
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __all__ = [
     "get_logger",
     "set_log_context",

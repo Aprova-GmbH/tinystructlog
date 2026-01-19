@@ -15,8 +15,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 project = "tinystructlog"
 copyright = "2026, Andrey Vykhodtsev (Aprova GmbH)"
 author = "Andrey Vykhodtsev"
-release = "0.1.1"
-version = "0.1.1"
+release = "0.1.2"
+version = "0.1.2"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
